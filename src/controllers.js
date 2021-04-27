@@ -98,12 +98,12 @@ const initControllers = (app, mongoose) => {
                 console.log(`sending email`);
                 sendEmail(ticket.email)
                 .then(() =>{
-                    res.send("payment succesfull");
-                })
+                    res.end("payment succesfull");
+                }).catch(err => console.log(err))
             })
             })
+            .catch(err=>console.log(err));
         })
-        res.end();
     });
 }
 

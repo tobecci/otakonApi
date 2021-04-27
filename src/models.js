@@ -28,6 +28,7 @@ const ticketModel = (data) => {
         let model = new ticketModel(data);
         resolve(model);
     })
+    .catch(err => console.log(err))
     })
 }
 
