@@ -7,6 +7,7 @@ const initDb = () => {
             console.log("mongo db could not connect: " + err);
         }
         console.log("mongodb connected");
+        console.log({mongoose:mongoose});
         return mongoose;
         }
     )
@@ -16,6 +17,7 @@ const ticketModel = (data) => {
     console.log("initializing ticket model")
     let mongoose = initDb();
     console.log(mongoose);
+
     const ticketSchema = mongoose.Schema({
         email: String,
         code: String,
