@@ -15,6 +15,7 @@ const initDb = () => {
 const ticketModel = (data) => {
     console.log("initializing ticket model")
     let mongoose = initDb();
+    console.log(mongoose);
     const ticketSchema = mongoose.Schema({
         email: String,
         code: String,
