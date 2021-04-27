@@ -1,27 +1,32 @@
-function funcA(){
+const initDb = () => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            let msg = "waited for 5 secs"
-            console.log(msg);
-            resolve(msg);
-        }, 5000);
-    })
+            let mongoose = require('mongoose');
+            mongoose.connect('mongodb+srv://tobecci:developer@cluster0.jmf3p.mongodb.net/otakon?retryWrites=true&w=majority', 
+            {useNewUrlParser: true, useUnifiedTopology: true})
+            .then(() => {
+            console.log("LINE 6: mongodb connected successfully");
+            console.log("code that comes after connection");
+            resolve(mongoose);
+        })
+        .catch(()=>{
+            console.log("an error ocurred");
+        })
+    });
 }
 
-
-function funcB(){
+const ticketModel = (data) => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log("waited for 2 secs");
-        }, 2000)
+        console.log("initializing ticket model")
+        initDb()
+    .then((mongoose) => {
+        console.log({mong:mongoose});
+        const ticketSchema = mongoose.Schema({
+        email: String,
+        code: String,
+        });
+        const ticketModel = mongoose.model("ticket",ticketSchema);
+        let model = new ticketModel(data);
+        resolve(model);
+    })
     })
 }
-
-funcA()
-.then((data) => {
-    console.log({data:data});
-    funcB();
-})
-
-// funcA();
-// funcB();

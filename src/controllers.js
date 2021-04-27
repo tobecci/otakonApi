@@ -103,7 +103,7 @@ const initControllers = (app, mongoose) => {
             })
             })
         })
-        
+        res.end();
     });
 }
 
