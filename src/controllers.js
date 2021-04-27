@@ -86,7 +86,10 @@ const initControllers = (app) => {
                 code: customer.customer_code
             }
             console.log({ticket: ticket});
+
             //insert into database
+            console.log("inserting into db");
+            
             let newTicket =  models.ticketModel(ticket);
             newTicket.save((err, ticket) => {
                 if(err) return console.log(err);
