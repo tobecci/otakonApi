@@ -2,9 +2,12 @@ const initDb = () => {
     let mongoose = require('mongoose');
     mongoose.connect('mongodb+srv://tobecci:developer@cluster0.jmf3p.mongodb.net/otakon?retryWrites=true&w=majority', 
     {useNewUrlParser: true, useUnifiedTopology: true})
-    .then((err) => {
-        console.log({err});
-        console.log("mongodb connected successfully");
+    .then(() => {
+        console.log("LINE 6: mongodb connected successfully");
+    })
+    .catch(()=>{
+        console.log("an error ocurred");
+        return null;
     })
 }
 
@@ -12,12 +15,13 @@ const ticketModel = (data) => {
     console.log("initializing ticket model")
 
     (async() => {
+        console.log("LINE 18: connecting to mongo");
         let mongoose = initDb();
     })()
     .then(() => {
-        console.log("it has finished");
+        console.log("LINE 22: it has finished");
     });
-
+    
     // console.log(mongoose);
 
     const ticketSchema = mongoose.Schema({
