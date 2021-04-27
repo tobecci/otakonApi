@@ -19,7 +19,7 @@ const sendEmail = (email) => {
 
         console.log({email:email});
 
-        QRCode.toDataURL(email, async function (err, url) {
+        QRCode.toDataURL(`https://otakon-api.herokuapp.com/verify/${email}`, async function (err, url) {
         console.log(url)
         let htmlData = `
         <h1>Thank you For purchasing a ticket to the convention</h1>
