@@ -13,6 +13,7 @@
     "@types/node": "^15.0.0",
     "express": "^4.17.1",
     "mongoose": "^5.12.5",
+    "nodemailer": "^6.5.0",
     "paystack": "^2.0.1",
     "qrcode": "^1.4.4"
   }

@@ -2,7 +2,46 @@ const config = require("./config.js");
 var paystack = require('paystack')(config.paystack.test.secret);
 var QRCode = require('qrcode');
 const models = require("./models.js");
+const nodemailer = require("nodemailer");
 
+
+const sendEmail = (email) => {
+    console.log("sending email with qr for email " + email );
+    let transporter = nodemailer.createTransport({
+        host: "smtp.hostinger.com",
+        port: 587,
+        secure: false,
+        auth: {
+            user: "otakon@outdoors.ng",
+            pass: "otakonEmailPassword0000@@@@",
+        },
+        });
+
+        console.log({email:email});
+
+        QRCode.toDataURL(email, async function (err, url) {
+        console.log(url)
+        let htmlData = `
+        <h1>Thank you For purchasing a ticket to the convention</h1>
+        <p>Attached to this email is your unique pass code</p>
+        <p>this will be scaned to grant you access to the event center</p>
+        <p>seen you on Saturday May 1st, 2021</p>
+        `;
+        let info = await transporter.sendMail({
+            from: "otakon@outdoors.ng", // sender address
+            to: email,
+            subject: "OTAKON-TITAN TICKET PURCHASE", // Subject line
+            html: htmlData,
+            attachments: [
+                {
+                    filename: "QR Code",
+                    path: url
+                }
+            ]
+            });
+            console.log({info:info});
+        })
+}
 
 const initControllers = (app) => {
     app.get("/", (req,res) =>{
@@ -13,13 +52,14 @@ const initControllers = (app) => {
     })
     
     app.get('/book', (req,res)=>{
+        
         let body = req.query;
+       if(body.email){
         let details = {
             amount:30000, 
             name: body.name, 
             email:body.email
         }
-        // res.json({body:body});
         paystack.transaction.initialize(details)
         .then((body, error) => {
             if(error){
@@ -28,6 +68,9 @@ const initControllers = (app) => {
             let {data} = body;
             res.redirect(data.authorization_url)
         });
+        return;
+       }
+       res.json({error:"did not supply data"});
     });   
     
     app.get('/paystack/callback', (req,res) => {
@@ -47,19 +90,12 @@ const initControllers = (app) => {
             let newTicket =  models.ticketModel(ticket);
             newTicket.save((err, ticket) => {
                 if(err) return console.log(err);
-                console.log(ticket);
+                console.log(`sending email`);
+                sendEmail(ticket.email);
             })
         })
         res.send("payment succesfull");
     });
-
-    app.get('/qr',(req,res)=>{
-        QRCode.toDataURL('ojinakatochukwu@gmail.com', function (err, url) {
-            // console.log(url)
-            res.send(`<img src="${url}" />`)
-          })
-        
-    })
 }
 
 module.exports = initControllers;
