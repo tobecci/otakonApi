@@ -1,0 +1,19 @@
+{
+  "name": "otakon-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tobecci",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^15.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.5",
+    "paystack": "^2.0.1",
+    "qrcode": "^1.4.4"
+  }
+}
