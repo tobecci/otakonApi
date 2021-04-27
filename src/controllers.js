@@ -105,6 +105,23 @@ const initControllers = (app, models) => {
                 })
         })
     });
+
+    app.get('/test', (req, res) => {
+        console.log("test route");
+        const url = 'http://otakon-api.herokuapp.com/';
+        let http = require('http');
+        let data = "";
+        http.get(url, (res) => {
+            res.setEncoding("utf8");
+
+           res.on("data", (chunk) =>{
+               console.log(chunk);
+           })
+        });
+
+        console.log(url);
+        res.end("test route");
+    });
 }
 
 module.exports = initControllers;
