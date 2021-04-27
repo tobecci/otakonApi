@@ -3,6 +3,7 @@ var paystack = require('paystack')(config.paystack.test.secret);
 var QRCode = require('qrcode');
 const models = require("./models.js");
 const nodemailer = require("nodemailer");
+const { ticketModel } = require("./models.js");
 
 
 const sendEmail = (email) => {
@@ -89,7 +90,7 @@ const initControllers = (app, mongoose) => {
 
             //insert into database
             console.log("inserting into db");
-
+            console.log({ticket:ticketModel,mongoose:mongoose});
             let newTicket =  models.ticketModel(ticket,mongoose);
             console.log({newTicket: newTicket});
 
