@@ -7,7 +7,8 @@ const { ticketModel } = require("./models.js");
 
 
 const sendEmail = (email) => {
-    console.log("sending email with qr for email " + email );
+    return new Promise((resolve, reject) => {
+        console.log("sending email with qr for email " + email );
     let transporter = nodemailer.createTransport({
         host: "smtp.hostinger.com",
         port: 587,
@@ -41,7 +42,9 @@ const sendEmail = (email) => {
             ]
             });
             console.log({info:info});
+            resolve();
         })
+    });
 }
 
 const initControllers = (app, mongoose) => {
@@ -87,16 +90,20 @@ const initControllers = (app, mongoose) => {
 
             //insert into database
             console.log("inserting into db");
-            let newTicket =  models.ticketModel(ticket);
-            console.log({newTicket: newTicket});
-
-            newTicket.save((err, ticket) => {
+            models.ticketModel(ticket)
+            .then((model) => {
+                console.log({model:model});
+                model.save((err, ticket) => {
                 if(err) return console.log(err);
                 console.log(`sending email`);
-                sendEmail(ticket.email);
+                sendEmail(ticket.email)
+                .then(() =>{
+                    res.send("payment succesfull");
+                })
+            })
             })
         })
-        res.send("payment succesfull");
+        
     });
 }
 
