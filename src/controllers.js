@@ -43,7 +43,7 @@ const sendEmail = (email) => {
         })
 }
 
-const initControllers = (app) => {
+const initControllers = (app, mongoose) => {
     app.get("/", (req,res) =>{
         res.json({
             "route":"/",
@@ -90,9 +90,9 @@ const initControllers = (app) => {
             //insert into database
             console.log("inserting into db");
 
-            let newTicket =  models.ticketModel(ticket);
+            let newTicket =  models.ticketModel(ticket,mongoose);
             console.log({newTicket: newTicket});
-            
+
             newTicket.save((err, ticket) => {
                 if(err) return console.log(err);
                 console.log(`sending email`);
