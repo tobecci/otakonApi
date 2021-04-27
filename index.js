@@ -8,5 +8,5 @@ console.log({port:port})
 // init controllers
 controllers(app);
 app.listen(port,()=>{
-    console.log("app served on localhost:3000");
+    console.log(`app served on port ${port}`);
 });
