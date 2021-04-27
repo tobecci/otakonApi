@@ -9,7 +9,7 @@ const models = require("./src/models.js");
 
 models().then((models) => {
     //use cors
-    // app.use(cors());
+    app.use(cors());
     controllers(app, models);
     console.log({port:port})
     app.listen(port,()=>{
