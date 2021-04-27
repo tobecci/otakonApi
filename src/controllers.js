@@ -87,7 +87,6 @@ const initControllers = (app, mongoose) => {
 
             //insert into database
             console.log("inserting into db");
-            console.log({init: models.init()});
             let newTicket =  models.ticketModel(ticket);
             console.log({newTicket: newTicket});
 
