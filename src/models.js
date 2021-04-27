@@ -14,25 +14,34 @@ const initDb = () => {
     });
 }
 
-const ticketModel = (data) => {
+const ticketModel = (mongoose) => {
     return new Promise((resolve, reject) => {
-        console.log("initializing ticket model")
-        initDb()
-    .then((mongoose) => {
-        console.log({mong:mongoose});
-        const ticketSchema = mongoose.Schema({
-        email: String,
-        code: String,
-        });
-        const ticketModel = mongoose.model("ticket",ticketSchema);
-        let model = new ticketModel(data);
-        resolve(model);
+        try {
+            const ticketSchema = mongoose.Schema({
+                email: String,
+                code: String,
+                });
+                let ticketModel = mongoose.model("ticket",ticketSchema);
+                resolve(ticketModel);
+        } catch (error) {
+            reject(error);
+        }
     })
-    .catch(err => console.log(err))
-    })
-}
+};
 
-module.exports = {
-    ticketModel: ticketModel,
-    init: initDb
+const getAllModels = () => {
+    return new Promise((resolve, reject) => {
+        let models = {};
+        
+        initDb().then((mongoose) => {
+
+        ticketModel(mongoose)
+        .then((model) => {
+            models.ticket = model;
+            resolve(models);
+        })
+        .catch(err => reject(error));
+    });
+    })
 }
+module.exports = getAllModels;

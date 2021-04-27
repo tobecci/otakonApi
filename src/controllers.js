@@ -1,9 +1,7 @@
 const config = require("./config.js");
 var paystack = require('paystack')(config.paystack.test.secret);
 var QRCode = require('qrcode');
-const models = require("./models.js");
 const nodemailer = require("nodemailer");
-const { ticketModel } = require("./models.js");
 
 
 const sendEmail = (email) => {
@@ -47,7 +45,10 @@ const sendEmail = (email) => {
     });
 }
 
-const initControllers = (app, mongoose) => {
+const initControllers = (app, models) => {
+
+    console.log("controller code don start");
+
     app.get("/", (req,res) =>{
         res.json({
             "route":"/",
@@ -90,19 +91,18 @@ const initControllers = (app, mongoose) => {
 
             //insert into database
             console.log("inserting into db");
-            models.ticketModel(ticket)
-            .then((model) => {
-                console.log({model:model});
-                model.save((err, ticket) => {
-                if(err) return console.log(err);
-                console.log(`sending email`);
-                sendEmail(ticket.email)
-                .then(() =>{
-                    res.end("payment succesfull");
-                }).catch(err => console.log(err))
-            })
-            })
-            .catch(err=>console.log(err));
+            
+            console.log({controllerModels: models});
+            let ticketModel = models.ticket(ticket);
+
+                ticketModel.save((err, ticket) => {
+                    if(err) return console.log(err);
+                    console.log(`sending email`);
+                    sendEmail(ticket.email)
+                    .then(() =>{
+                        res.end("payment succesfull");
+                    }).catch(err => console.log(err))
+                })
         })
     });
 }
