@@ -100,7 +100,8 @@ const initControllers = (app, models) => {
                     console.log(`sending email`);
                     sendEmail(ticket.email)
                     .then(() =>{
-                        res.end("payment succesfull");
+                        // res.end("payment succesfull");
+                        res.redirect("https://otakontitan.netlify.app/booking-success");
                     }).catch(err => console.log(err))
                 })
         })
