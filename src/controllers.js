@@ -76,12 +76,9 @@ const initControllers = (app, mongoose) => {
     
     app.get('/paystack/callback', (req,res) => {
         console.log("callback successful");
-        // console.log({req: req.query.reference});
         paystack.transaction.verify(req.query.reference)
         .then((body,error) => {
-            // console.log(body);
             let {customer} = body.data;
-            // console.log({customer:customer});
             ticket = {
                 email: customer.email,
                 code: customer.customer_code
@@ -90,8 +87,8 @@ const initControllers = (app, mongoose) => {
 
             //insert into database
             console.log("inserting into db");
-            console.log({ticket:ticketModel,mongoose:mongoose});
-            let newTicket =  models.ticketModel(ticket,mongoose);
+            console.log({init: models.init()});
+            let newTicket =  models.ticketModel(ticket);
             console.log({newTicket: newTicket});
 
             newTicket.save((err, ticket) => {
