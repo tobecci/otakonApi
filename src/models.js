@@ -1,16 +1,11 @@
 const initDb = () => {
     let mongoose = require('mongoose');
     mongoose.connect('mongodb+srv://tobecci:developer@cluster0.jmf3p.mongodb.net/otakon?retryWrites=true&w=majority', 
-    {useNewUrlParser: true, useUnifiedTopology: true},
-    (err)=>{
-        if(err){
-            console.log("mongo db could not connect: " + err);
-        }
-        console.log("mongodb connected");
-        console.log({mongoose:mongoose});
-        return mongoose;
-        }
-    )
+    {useNewUrlParser: true, useUnifiedTopology: true})
+    .then((err) => {
+        console.log({err});
+        console.log("mongodb connected successfully");
+    })
 }
 
 const ticketModel = (data) => {
