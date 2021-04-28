@@ -1,5 +1,6 @@
 const config = require("./config.js");
-var paystack = require('paystack')(config.paystack.test.secret);
+// var paystack = require('paystack')(config.paystack.test.secret);
+var paystack = require('paystack')(config.paystack.live.secret);
 var QRCode = require('qrcode');
 const nodemailer = require("nodemailer");
 
