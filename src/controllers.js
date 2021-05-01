@@ -69,7 +69,11 @@ const initControllers = (app, models) => {
     })
     
     app.get('/book', (req,res)=>{
-        
+
+        //end ticket sales
+        res.end("ticket booking is over");
+        return;
+
         let body = req.query;
        if(body.email){
         let details = {
