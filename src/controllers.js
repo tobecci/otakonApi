@@ -124,6 +124,11 @@ const initControllers = (app, models) => {
         console.log(url);
         res.end("test route");
     });
+
+    app.get('/verify', (req, res) => {
+        console.log("verification route");
+        res.end("verify oh");
+    });
 }
 
 module.exports = initControllers;
