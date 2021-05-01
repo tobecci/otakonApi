@@ -46,6 +46,17 @@ const sendEmail = (email) => {
     });
 }
 
+const getTicket = (email,models) => {
+    return new Promise((resolve, reject) => {
+        models.ticket.findOne({email: email}, (err, ticket) => {
+            if(err) throw new Error(err);
+            if(ticket === null) reject();
+            resolve(ticket);
+        })
+    })
+}
+
+
 const initControllers = (app, models) => {
 
     console.log("controller code don start");
@@ -109,25 +120,68 @@ const initControllers = (app, models) => {
     });
 
     app.get('/test', (req, res) => {
-        console.log("test route");
-        const url = 'http://otakon-api.herokuapp.com/';
-        let http = require('http');
-        let data = "";
-        http.get(url, (res) => {
-            res.setEncoding("utf8");
-
-           res.on("data", (chunk) =>{
-               console.log(chunk);
-           })
-        });
-
-        console.log(url);
-        res.end("test route");
+        res.render("test",{name:"tobecci"});
     });
 
-    app.get('/verify', (req, res) => {
-        console.log("verification route");
-        res.end("verify oh");
+    app.get('/registered', (req, res) => {
+        models.ticket.find((err, tickets) => {
+            res.render("purchasedTickets",{
+                tickets:tickets
+            });
+        })
+        // res.render("test",{name:"tobecci"});
+    });
+
+    app.get('/scanned', (req, res) => {
+       models.scannedTicket.find((err, tickets) => {
+            res.render("scannedTickets",{
+                tickets:tickets
+            });
+        })
+    });
+
+    app.get('/verify/:email', (req, res) => {
+        let email = req.params.email;
+        console.log("verification route", {email:email});
+        
+        getTicket(email,models)
+        .then((ticket) => {
+            console.log("ticket exists");
+            let data = {
+                email: ticket.email,
+                code: ticket.code
+            };
+
+            //save mark ticket as scanned
+            let scannedTicket = new models.scannedTicket(data);
+            console.log({scannedTicket:scannedTicket});
+            scannedTicket.save((err, scannedTicket) => {
+                if(err) throw err;
+                console.log("scanned ticket saved");
+
+                //delete old ticket
+                ticket.delete((err, ticket) =>{
+                    if(err) throw new Error(err);
+                    console.log("ticket deleted");
+                })
+            });
+            res.render("scanPass");
+        })
+        .catch(()=>{
+
+            //ticket has already been scanned
+            models.scannedTicket.findOne({email:email}, (err, ticket) => {
+                if(ticket === null){
+                    res.render("scanFail");
+                    return;
+                }
+                res.render("scanned");
+                return;
+            })    
+        });
+       
+        
+        // res.json({email:email});
     });
 }
 

@@ -45,7 +45,21 @@ const sendEmail = (email) => {
 
 // let email = `estherdaniels79@gmail.com`;
 // let email = `emeghara6@gmail.com`;
+let email = `ojinakatochukwu@gmail.com`;
 
 // sendEmail(email).then(() => {
 //     console.log("hello");
 // })
+
+const models = require("./src/models.js");
+
+let modelList = {};
+models().then((models) => {
+    let ticketModel = models.ticket;
+    let ticket = {email: email, code: "randomestCode"};
+    ticket = ticketModel(ticket);
+    console.log({ticketModel: ticketModel, ticket: ticket});
+    ticket.save((err, ticket) => {
+        console.log(ticket);
+    });
+});

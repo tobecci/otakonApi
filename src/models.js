@@ -29,6 +29,22 @@ const ticketModel = (mongoose) => {
     })
 };
 
+const scannedTicketModel = (mongoose) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const ticketSchema = mongoose.Schema({
+                email: String,
+                code: String,
+                });
+                let scannedTicketModel = mongoose.model("scannedTicket",ticketSchema);
+                console.log("created the scanned ticket model", {scannedTicketModel:scannedTicketModel});
+                resolve(scannedTicketModel);
+        } catch (error) {
+            reject(error);
+        }
+    })
+};
+
 const getAllModels = () => {
     return new Promise((resolve, reject) => {
         let models = {};
@@ -38,9 +54,12 @@ const getAllModels = () => {
         ticketModel(mongoose)
         .then((model) => {
             models.ticket = model;
-            resolve(models);
+            scannedTicketModel(mongoose)
+            .then((scannedTicketModel) => {
+                models.scannedTicket = scannedTicketModel;
+                resolve(models);
+            })
         })
-        .catch(err => reject(error));
     });
     })
 }
